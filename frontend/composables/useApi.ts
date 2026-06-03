@@ -25,7 +25,11 @@ interface BookPayload {
  * 모든 호출은 새 객체를 반환하며 입력을 변형하지 않는다.
  */
 export function useApi() {
-  const base = useRuntimeConfig().public.apiBase;
+  // SSR(특히 Cloudflare)에서는 내부 $fetch 합성 이벤트에 D1 바인딩이 없어
+  // 빈 데이터가 된다. 서버에서는 실제 요청 컨텍스트를 타도록 절대 origin을,
+  // 클라이언트에서는 상대경로를 사용한다.
+  const configuredBase = useRuntimeConfig().public.apiBase || "";
+  const base = import.meta.server ? useRequestURL().origin : configuredBase;
 
   const request = <T>(path: string, options: any = {}): Promise<T> =>
     $fetch<T>(`${base}${path}`, options);
