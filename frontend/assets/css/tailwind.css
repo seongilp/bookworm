@@ -1,0 +1,122 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  토스 스타일: 넉넉한 여백, 중립 회색 기반, 단일 블루 액센트(#3182F6).
+  알록달록한 색은 배제하고 흑백 + 포인트 블루 하나로 정리.
+*/
+:root {
+  --radius: 0.875rem;
+
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.18 0.006 264);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.006 264);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.006 264);
+
+  /* 토스 블루 */
+  --primary: oklch(0.62 0.18 256);
+  --primary-foreground: oklch(0.99 0 0);
+
+  --secondary: oklch(0.97 0.002 264);
+  --secondary-foreground: oklch(0.28 0.006 264);
+
+  --muted: oklch(0.968 0.002 264);
+  --muted-foreground: oklch(0.55 0.006 264);
+
+  --accent: oklch(0.968 0.002 264);
+  --accent-foreground: oklch(0.28 0.006 264);
+
+  --destructive: oklch(0.62 0.21 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.928 0.003 264);
+  --input: oklch(0.928 0.003 264);
+  --ring: oklch(0.62 0.18 256);
+}
+
+.dark {
+  --background: oklch(0.16 0.005 264);
+  --foreground: oklch(0.97 0.002 264);
+
+  --card: oklch(0.2 0.005 264);
+  --card-foreground: oklch(0.97 0.002 264);
+
+  --popover: oklch(0.2 0.005 264);
+  --popover-foreground: oklch(0.97 0.002 264);
+
+  --primary: oklch(0.65 0.18 256);
+  --primary-foreground: oklch(0.16 0.005 264);
+
+  --secondary: oklch(0.27 0.005 264);
+  --secondary-foreground: oklch(0.97 0.002 264);
+
+  --muted: oklch(0.27 0.005 264);
+  --muted-foreground: oklch(0.68 0.006 264);
+
+  --accent: oklch(0.27 0.005 264);
+  --accent-foreground: oklch(0.97 0.002 264);
+
+  --destructive: oklch(0.62 0.21 27);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.3 0.005 264);
+  --input: oklch(0.3 0.005 264);
+  --ring: oklch(0.65 0.18 256);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR",
+    sans-serif;
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-feature-settings: "ss01", "cv01";
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background-color: color-mix(in oklch, var(--primary) 22%, transparent);
+  }
+}

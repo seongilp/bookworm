@@ -1,0 +1,11 @@
+name = "bookworm"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "dist"
+
+# D1 (SQLite) 데이터베이스 바인딩.
+# database_id 는 `wrangler d1 create bookworm` 후 채워진다. (로컬 dev는 Miniflare가 자동 생성)
+[[d1_databases]]
+binding = "DB"
+database_name = "bookworm"
+database_id = "6272bd56-9a1b-4c49-96a6-5b56551abbde"
