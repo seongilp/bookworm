@@ -82,7 +82,7 @@ async function remove(q: Quote) {
       <input
         v-model="search"
         placeholder="문장, 책, 태그 검색"
-        class="h-12 w-full rounded-2xl border border-input bg-secondary/50 pl-11 pr-4 text-sm transition-colors placeholder:text-muted-foreground focus-visible:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        class="h-12 w-full rounded-2xl border border-input bg-secondary/50 pl-11 pr-4 text-sm transition-colors placeholder:text-muted-foreground focus-visible:bg-background focus-visible:outline-none focus-visible:border-primary focus-visible:ring-[3px] focus-visible:ring-primary/20"
       />
     </div>
 
