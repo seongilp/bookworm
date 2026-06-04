@@ -19,7 +19,7 @@ const isActive = (to: string) =>
   <div class="min-h-screen lg:flex">
     <!-- 데스크톱: 좌측 사이드바 -->
     <aside
-      class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-border/60 bg-background px-4 py-6 lg:flex"
+      class="fixed inset-y-0 left-0 z-40 hidden w-60 flex-col border-r border-border/60 bg-background px-4 py-6 md:flex"
     >
       <NuxtLink to="/" class="mb-8 flex items-center gap-2.5 px-2">
         <span
@@ -53,7 +53,7 @@ const isActive = (to: string) =>
 
     <!-- 모바일: 상단 헤더 -->
     <header
-      class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md lg:hidden"
+      class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md md:hidden"
     >
       <div class="flex h-16 items-center justify-between px-5">
         <NuxtLink to="/" class="flex items-center gap-2">
@@ -68,9 +68,9 @@ const isActive = (to: string) =>
     </header>
 
     <!-- 본문 -->
-    <div class="flex-1 lg:pl-64">
+    <div class="flex-1 md:pl-60">
       <main
-        class="mx-auto w-full max-w-5xl px-5 pb-28 pt-6 lg:px-12 lg:pb-16 lg:pt-12"
+        class="mx-auto w-full max-w-5xl px-5 pb-28 pt-6 md:px-10 md:pb-16 md:pt-10"
       >
         <slot />
       </main>
@@ -78,7 +78,7 @@ const isActive = (to: string) =>
 
     <!-- 모바일: 하단 탭바 -->
     <nav
-      class="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 backdrop-blur-md lg:hidden"
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 backdrop-blur-md md:hidden"
     >
       <div class="mx-auto flex max-w-2xl items-stretch">
         <NuxtLink
