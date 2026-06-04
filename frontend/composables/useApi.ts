@@ -48,6 +48,11 @@ export function useApi() {
       request<void>(`/api/books/${id}`, { method: "DELETE" }),
     searchBooks: (q: string) =>
       request<BookSearchResult[]>("/api/books/search", { query: { q } }),
+    lookupBook: (isbn: string) =>
+      request<{ total_pages: number | null; cover_url: string; description: string }>(
+        "/api/books/lookup",
+        { query: { isbn } },
+      ),
     getBestsellers: (category: string) =>
       request<BestsellerResponse>("/api/bestsellers", { query: { category } }),
 

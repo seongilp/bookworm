@@ -144,6 +144,40 @@ async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
   }));
 }
 
+/**
+ * ISBN으로 알라딘 상세조회 → 페이지수 등 검색결과에 없는 정보 보강.
+ * 키/ISBN 없으면 null.
+ */
+export async function lookupByIsbn(
+  isbn: string,
+  aladinKey: string,
+): Promise<{ total_pages: number | null; cover_url: string; description: string } | null> {
+  const id = isbn.trim();
+  if (!aladinKey || !id) return null;
+  try {
+    const data = await $fetch<any>("http://www.aladin.co.kr/ttb/api/ItemLookUp.aspx", {
+      query: {
+        ttbkey: aladinKey,
+        itemIdType: id.length === 13 ? "ISBN13" : "ISBN",
+        ItemId: id,
+        Cover: "Big",
+        OptResult: "subInfo",
+        output: "js",
+        Version: "20131101",
+      },
+    });
+    const it = (data?.item || [])[0];
+    if (!it) return null;
+    return {
+      total_pages: toInt(it?.subInfo?.itemPage),
+      cover_url: clean(it.cover),
+      description: clean(it.description),
+    };
+  } catch {
+    return null;
+  }
+}
+
 /** 알라딘 분야별 베스트셀러. 키가 없으면 빈 배열(베스트셀러는 알라딘 전용). */
 export async function fetchBestsellers(
   categoryId: number,

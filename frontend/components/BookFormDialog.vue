@@ -80,7 +80,9 @@ watchDebounced(
   { debounce: 450 },
 );
 
-function pick(r: BookSearchResult) {
+const lookingUp = ref(false);
+
+async function pick(r: BookSearchResult) {
   title.value = r.title;
   author.value = r.author;
   publisher.value = r.publisher;
@@ -91,6 +93,22 @@ function pick(r: BookSearchResult) {
   results.value = [];
   searchQuery.value = "";
   searched.value = false;
+
+  // 검색 결과에 페이지수가 없으면 ISBN으로 상세조회해 보강
+  if (!r.total_pages && r.isbn) {
+    lookingUp.value = true;
+    try {
+      const detail = await api.lookupBook(r.isbn);
+      if (detail?.total_pages && !totalPages.value) {
+        totalPages.value = String(detail.total_pages);
+      }
+      if (detail?.cover_url && !coverUrl.value) coverUrl.value = detail.cover_url;
+    } catch {
+      /* 페이지수 보강 실패는 무시 */
+    } finally {
+      lookingUp.value = false;
+    }
+  }
 }
 
 function clearCover() {
@@ -248,9 +266,12 @@ async function save() {
           <UiInput v-model="currentPage" type="number" placeholder="0" />
         </div>
         <div class="space-y-1">
-          <label class="text-[12px] font-semibold text-foreground/80"
-            >전체 페이지</label
-          >
+          <label class="flex items-center gap-1 text-[12px] font-semibold text-foreground/80">
+            전체 페이지
+            <span v-if="lookingUp" class="flex items-center gap-1 text-primary">
+              <Loader2 class="size-3 animate-spin" /> 가져오는 중
+            </span>
+          </label>
           <UiInput v-model="totalPages" type="number" placeholder="예: 320" />
         </div>
       </div>
