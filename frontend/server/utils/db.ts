@@ -51,18 +51,30 @@ const SCHEMA: string[] = [
 export async function useDb(event: H3Event): Promise<D1Database> {
   const db = getBinding(event);
   if (!schemaReady) {
+    // 스키마 생성(멱등) 후 단일-플라이트 시드(정확히 1회).
     for (const stmt of SCHEMA) {
       await db.prepare(stmt).run();
     }
-    await seedIfEmpty(db);
+    await seedOnce(db);
     schemaReady = true;
   }
   return db;
 }
 
-async function seedIfEmpty(db: D1Database): Promise<void> {
-  const row = await db.prepare("SELECT COUNT(*) AS n FROM book").first<{ n: number }>();
-  if (row && row.n > 0) return;
+/**
+ * 데모 시드. 단일-플라이트 마커(_meta.seeded)로 정확히 1회만 실행되어
+ * 배포 전파 중 여러 isolate가 동시에 시드하는 경쟁을 막는다.
+ * 외부에서 명시적으로 호출(예: 시드 엔드포인트)하거나 비워둘 수 있다.
+ */
+export async function seedOnce(db: D1Database): Promise<boolean> {
+  await db
+    .prepare("CREATE TABLE IF NOT EXISTS _meta (key TEXT PRIMARY KEY, value TEXT)")
+    .run();
+  const claim = await db
+    .prepare("INSERT OR IGNORE INTO _meta (key, value) VALUES ('seeded', '1')")
+    .run();
+  // 이미 시드됨(혹은 다른 isolate가 선점) → 중복 시드 방지
+  if (claim.meta.changes !== 1) return false;
 
   const now = new Date().toISOString();
   const books = [
@@ -180,4 +192,5 @@ async function seedIfEmpty(db: D1Database): Promise<void> {
         .run();
     }
   }
+  return true;
 }

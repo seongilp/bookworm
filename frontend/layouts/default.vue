@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { Home, Library, Heart, BarChart3 } from "lucide-vue-next";
+import { Home, Library, TrendingUp, Heart, BarChart3 } from "lucide-vue-next";
 
 const route = useRoute();
 
 const tabs = [
   { to: "/", label: "홈", icon: Home },
   { to: "/books", label: "책장", icon: Library },
+  { to: "/bestsellers", label: "베스트셀러", icon: TrendingUp },
   { to: "/favorites", label: "즐겨찾기", icon: Heart },
   { to: "/stats", label: "통계", icon: BarChart3 },
 ];
@@ -15,47 +16,83 @@ const isActive = (to: string) =>
 </script>
 
 <template>
-  <div class="mx-auto flex min-h-screen max-w-2xl flex-col">
-    <!-- 상단 헤더 -->
+  <div class="min-h-screen lg:flex">
+    <!-- 데스크톱: 좌측 사이드바 -->
+    <aside
+      class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-border/60 bg-background px-4 py-6 lg:flex"
+    >
+      <NuxtLink to="/" class="mb-8 flex items-center gap-2.5 px-2">
+        <span
+          class="flex size-9 items-center justify-center rounded-xl bg-primary text-base font-black text-primary-foreground"
+          >책</span
+        >
+        <span class="text-[18px] font-bold tracking-tight">문장수집</span>
+      </NuxtLink>
+
+      <nav class="flex flex-1 flex-col gap-1">
+        <NuxtLink
+          v-for="tab in tabs"
+          :key="tab.to"
+          :to="tab.to"
+          class="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] font-semibold transition-colors"
+          :class="
+            isActive(tab.to)
+              ? 'bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+          "
+        >
+          <component :is="tab.icon" class="size-[20px]" :stroke-width="2.2" />
+          {{ tab.label }}
+        </NuxtLink>
+      </nav>
+
+      <div class="px-1">
+        <ClientOnly><DarkToggle /></ClientOnly>
+      </div>
+    </aside>
+
+    <!-- 모바일: 상단 헤더 -->
     <header
-      class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md"
+      class="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md lg:hidden"
     >
       <div class="flex h-16 items-center justify-between px-5">
         <NuxtLink to="/" class="flex items-center gap-2">
           <span
-            class="flex size-8 items-center justify-center rounded-xl bg-foreground text-background text-sm font-black"
+            class="flex size-8 items-center justify-center rounded-xl bg-primary text-sm font-black text-primary-foreground"
             >책</span
           >
           <span class="text-[17px] font-bold tracking-tight">문장수집</span>
         </NuxtLink>
-        <ClientOnly>
-          <DarkToggle />
-        </ClientOnly>
+        <ClientOnly><DarkToggle /></ClientOnly>
       </div>
     </header>
 
     <!-- 본문 -->
-    <main class="flex-1 px-5 pb-28 pt-6">
-      <slot />
-    </main>
+    <div class="flex-1 lg:pl-64">
+      <main
+        class="mx-auto w-full max-w-5xl px-5 pb-28 pt-6 lg:px-12 lg:pb-16 lg:pt-12"
+      >
+        <slot />
+      </main>
+    </div>
 
-    <!-- 하단 탭바 (토스 스타일) -->
+    <!-- 모바일: 하단 탭바 -->
     <nav
-      class="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 backdrop-blur-md"
+      class="fixed inset-x-0 bottom-0 z-40 border-t border-border/60 bg-background/90 backdrop-blur-md lg:hidden"
     >
       <div class="mx-auto flex max-w-2xl items-stretch">
         <NuxtLink
           v-for="tab in tabs"
           :key="tab.to"
           :to="tab.to"
-          class="flex flex-1 flex-col items-center gap-1 py-3 text-[11px] font-medium transition-colors"
+          class="flex flex-1 flex-col items-center gap-1 py-2.5 text-[10px] font-medium transition-colors"
           :class="
             isActive(tab.to)
               ? 'text-primary'
               : 'text-muted-foreground hover:text-foreground'
           "
         >
-          <component :is="tab.icon" class="size-[22px]" :stroke-width="2.2" />
+          <component :is="tab.icon" class="size-[21px]" :stroke-width="2.2" />
           {{ tab.label }}
         </NuxtLink>
       </div>

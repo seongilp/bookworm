@@ -12,7 +12,18 @@ export interface BookSearchResult {
   total_pages: number | null;
   description: string;
   source: string;
+  rank?: number;
 }
+
+// 알라딘 분야별 CategoryId (베스트셀러 탭)
+export const BESTSELLER_CATEGORIES: { key: string; label: string; cid: number }[] = [
+  { key: "all", label: "종합", cid: 0 },
+  { key: "novel", label: "소설", cid: 1 },
+  { key: "essay", label: "에세이", cid: 55889 },
+  { key: "economy", label: "경제경영", cid: 170 },
+  { key: "self", label: "자기계발", cid: 336 },
+  { key: "humanities", label: "인문", cid: 656 },
+];
 
 // 일부 공개 API(OpenLibrary 등)는 User-Agent 없는 요청을 차단/제한한다.
 const UA = "bookworm/1.0 (문장수집 책장 앱)";
@@ -129,6 +140,40 @@ async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
     total_pages: toInt(d.number_of_pages_median),
     description: "",
     source: "openlibrary",
+  }));
+}
+
+/** 알라딘 분야별 베스트셀러. 키가 없으면 빈 배열(베스트셀러는 알라딘 전용). */
+export async function fetchBestsellers(
+  categoryId: number,
+  aladinKey: string,
+): Promise<BookSearchResult[]> {
+  if (!aladinKey) return [];
+  const data = await $fetch<any>("http://www.aladin.co.kr/ttb/api/ItemList.aspx", {
+    query: {
+      ttbkey: aladinKey,
+      QueryType: "Bestseller",
+      SearchTarget: "Book",
+      CategoryId: categoryId,
+      MaxResults: 30,
+      start: 1,
+      Cover: "Big",
+      OptResult: "subInfo",
+      output: "js",
+      Version: "20131101",
+    },
+  });
+  const items = Array.isArray(data?.item) ? data.item : [];
+  return items.map((it: any, i: number) => ({
+    title: clean(it.title),
+    author: clean(it.author),
+    publisher: clean(it.publisher),
+    cover_url: clean(it.cover),
+    isbn: clean(it.isbn13 || it.isbn),
+    total_pages: toInt(it?.subInfo?.itemPage),
+    description: clean(it.description),
+    source: "aladin",
+    rank: typeof it.bestRank === "number" ? it.bestRank : i + 1,
   }));
 }
 

@@ -1,5 +1,6 @@
 import type {
   Book,
+  BestsellerResponse,
   BookSearchResult,
   BookStatus,
   Quote,
@@ -47,6 +48,8 @@ export function useApi() {
       request<void>(`/api/books/${id}`, { method: "DELETE" }),
     searchBooks: (q: string) =>
       request<BookSearchResult[]>("/api/books/search", { query: { q } }),
+    getBestsellers: (category: string) =>
+      request<BestsellerResponse>("/api/bestsellers", { query: { category } }),
 
     // ---- Quotes ----
     listQuotes: (query: QuoteQuery = {}) =>

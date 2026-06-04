@@ -47,7 +47,23 @@ export interface BookSearchResult {
   total_pages: number | null;
   description: string;
   source: string;
+  rank?: number;
 }
+
+export interface BestsellerResponse {
+  category: string;
+  source: string;
+  items: BookSearchResult[];
+}
+
+export const BESTSELLER_TABS: { key: string; label: string }[] = [
+  { key: "all", label: "종합" },
+  { key: "novel", label: "소설" },
+  { key: "essay", label: "에세이" },
+  { key: "economy", label: "경제경영" },
+  { key: "self", label: "자기계발" },
+  { key: "humanities", label: "인문" },
+];
 
 export interface QuoteQuery {
   q?: string;

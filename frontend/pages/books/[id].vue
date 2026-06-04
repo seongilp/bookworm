@@ -90,7 +90,7 @@ function onBookSaved(updated: Book) {
 </script>
 
 <template>
-  <div>
+  <div class="mx-auto max-w-3xl">
     <button
       class="mb-4 flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
       @click="router.push('/books')"
