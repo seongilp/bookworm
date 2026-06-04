@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search, Check, Loader2, X } from "lucide-vue-next";
+import { Search, Check, Loader2, X, RefreshCw } from "lucide-vue-next";
 import { watchDebounced } from "@vueuse/core";
 import type { Book, BookStatus, BookSearchResult } from "~/types";
 import { STATUS_META } from "~/types";
@@ -58,7 +58,7 @@ async function fillPagesByIsbn(bookIsbn: string) {
   if (!bookIsbn || totalPages.value) return;
   lookingUp.value = true;
   try {
-    const detail = await api.lookupBook(bookIsbn);
+    const detail = await api.lookupBook({ isbn: bookIsbn });
     if (detail?.total_pages && !totalPages.value) {
       totalPages.value = String(detail.total_pages);
     }
@@ -67,6 +67,30 @@ async function fillPagesByIsbn(bookIsbn: string) {
     /* 무시 */
   } finally {
     lookingUp.value = false;
+  }
+}
+
+// 이미 담은 책 정보 새로고침 (ISBN 우선, 없으면 제목으로 외부 조회 후 일괄 갱신)
+const refreshing = ref(false);
+async function refreshInfo() {
+  if (refreshing.value) return;
+  refreshing.value = true;
+  try {
+    const detail = await api.lookupBook({ isbn: isbn.value, q: title.value });
+    if (detail && detail.title) {
+      if (detail.author) author.value = detail.author;
+      if (detail.publisher) publisher.value = detail.publisher;
+      if (detail.cover_url) coverUrl.value = detail.cover_url;
+      if (detail.isbn) isbn.value = detail.isbn;
+      if (detail.total_pages) totalPages.value = String(detail.total_pages);
+      toast.success("도서 정보를 갱신했어요");
+    } else {
+      toast.error("정보를 찾지 못했어요");
+    }
+  } catch {
+    toast.error("갱신에 실패했어요");
+  } finally {
+    refreshing.value = false;
   }
 }
 
@@ -115,7 +139,17 @@ async function pick(r: BookSearchResult) {
   searched.value = false;
 
   // 검색 결과에 페이지수가 없으면 ISBN으로 상세조회해 보강
-  if (!r.total_pages && r.isbn) await fillPagesByIsbn(r.isbn);
+  if (!r.total_pages && r.isbn) {
+    lookingUp.value = true;
+    try {
+      const d = await api.lookupBook({ isbn: r.isbn });
+      if (d?.total_pages && !totalPages.value) totalPages.value = String(d.total_pages);
+    } catch {
+      /* 무시 */
+    } finally {
+      lookingUp.value = false;
+    }
+  }
 }
 
 function clearCover() {
@@ -205,6 +239,18 @@ async function save() {
           검색 결과가 없어요. 아래에 직접 입력해 주세요.
         </p>
       </div>
+
+      <!-- 정보 새로고침 (수정 모드) -->
+      <button
+        v-if="isEdit"
+        type="button"
+        class="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-secondary/40 py-2.5 text-[13px] font-semibold text-foreground/80 transition-colors hover:bg-accent disabled:opacity-60"
+        :disabled="refreshing"
+        @click="refreshInfo"
+      >
+        <RefreshCw class="size-4" :class="refreshing ? 'animate-spin' : ''" />
+        {{ refreshing ? "갱신 중..." : "도서 정보 새로고침 (표지·저자·페이지)" }}
+      </button>
 
       <!-- 선택/입력된 책 미리보기 + 폼 -->
       <div class="flex gap-3">

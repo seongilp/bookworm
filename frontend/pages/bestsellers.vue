@@ -112,20 +112,20 @@ async function add(item: BookSearchResult) {
         class="flex items-center gap-3 rounded-2xl border border-border/70 bg-card p-3"
       >
         <span
-          class="w-6 shrink-0 text-center text-lg font-extrabold tabular-nums"
+          class="w-6 shrink-0 self-center text-center text-lg font-extrabold tabular-nums"
           :class="(item.rank ?? 0) <= 3 ? 'text-primary' : 'text-muted-foreground/50'"
         >
           {{ item.rank }}
         </span>
-        <BookCover :book="item" class="w-12 shrink-0 shadow-sm" />
-        <div class="min-w-0 flex-1">
+        <BookCover :book="item" class="w-12 shrink-0 self-center shadow-sm" />
+        <div class="flex min-h-16 min-w-0 flex-1 flex-col justify-center">
           <p class="line-clamp-2 text-[14px] font-bold leading-snug">{{ item.title }}</p>
           <p class="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">
             {{ item.author }}
           </p>
         </div>
         <button
-          class="flex shrink-0 items-center gap-1 rounded-full px-3.5 py-2 text-[13px] font-bold transition-all active:scale-95"
+          class="flex shrink-0 items-center gap-1 self-center rounded-full px-3.5 py-2 text-[13px] font-bold transition-all active:scale-95"
           :class="
             ownedKeys.has(key(item))
               ? 'bg-secondary text-muted-foreground'

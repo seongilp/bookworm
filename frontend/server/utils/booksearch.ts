@@ -151,7 +151,7 @@ async function searchOpenLibrary(query: string): Promise<BookSearchResult[]> {
 export async function lookupByIsbn(
   isbn: string,
   aladinKey: string,
-): Promise<{ total_pages: number | null; cover_url: string; description: string } | null> {
+): Promise<BookSearchResult | null> {
   const id = isbn.trim();
   if (!aladinKey || !id) return null;
   try {
@@ -169,9 +169,14 @@ export async function lookupByIsbn(
     const it = (data?.item || [])[0];
     if (!it) return null;
     return {
-      total_pages: toInt(it?.subInfo?.itemPage),
+      title: clean(it.title),
+      author: clean(it.author),
+      publisher: clean(it.publisher),
       cover_url: clean(it.cover),
+      isbn: clean(it.isbn13 || it.isbn),
+      total_pages: toInt(it?.subInfo?.itemPage),
       description: clean(it.description),
+      source: "aladin",
     };
   } catch {
     return null;
