@@ -58,7 +58,7 @@ async function remove(q: Quote) {
       <template #icon>🤍</template>
     </EmptyState>
 
-    <div v-else class="grid grid-cols-1 gap-3 lg:grid-cols-2 lg:gap-4">
+    <div v-else class="space-y-3">
       <QuoteCard
         v-for="q in quotes"
         :key="q.id"

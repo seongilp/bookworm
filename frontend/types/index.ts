@@ -63,6 +63,7 @@ export const BESTSELLER_TABS: { key: string; label: string }[] = [
   { key: "economy", label: "경제경영" },
   { key: "self", label: "자기계발" },
   { key: "humanities", label: "인문" },
+  { key: "it", label: "IT" },
 ];
 
 export interface QuoteQuery {

@@ -83,8 +83,8 @@ async function add(item: BookSearchResult) {
       </button>
     </div>
 
-    <div v-if="pending" class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <div v-for="i in 6" :key="i" class="h-28 animate-pulse rounded-2xl bg-muted" />
+    <div v-if="pending" class="mx-auto max-w-3xl space-y-3">
+      <div v-for="i in 8" :key="i" class="h-24 animate-pulse rounded-2xl bg-muted" />
     </div>
 
     <EmptyState
@@ -95,7 +95,7 @@ async function add(item: BookSearchResult) {
       <template #icon>🏆</template>
     </EmptyState>
 
-    <div v-else class="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+    <div v-else class="mx-auto max-w-3xl space-y-3">
       <div
         v-for="item in data.items"
         :key="item.rank + item.title"

@@ -23,6 +23,7 @@ export const BESTSELLER_CATEGORIES: { key: string; label: string; cid: number }[
   { key: "economy", label: "경제경영", cid: 170 },
   { key: "self", label: "자기계발", cid: 336 },
   { key: "humanities", label: "인문", cid: 656 },
+  { key: "it", label: "IT", cid: 351 },
 ];
 
 // 일부 공개 API(OpenLibrary 등)는 User-Agent 없는 요청을 차단/제한한다.
