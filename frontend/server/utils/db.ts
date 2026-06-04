@@ -51,14 +51,25 @@ const SCHEMA: string[] = [
 export async function useDb(event: H3Event): Promise<D1Database> {
   const db = getBinding(event);
   if (!schemaReady) {
-    // 스키마 생성(멱등) 후 단일-플라이트 시드(정확히 1회).
-    for (const stmt of SCHEMA) {
-      await db.prepare(stmt).run();
-    }
-    await seedOnce(db);
+    await ensureReady(db);
     schemaReady = true;
   }
   return db;
+}
+
+/**
+ * 콜드 스타트 비용 최소화: 이미 초기화된 DB면 단 1쿼리로 확인 후 종료.
+ * 신규 DB일 때만 스키마(배치) + 시드를 수행한다.
+ */
+async function ensureReady(db: D1Database): Promise<void> {
+  try {
+    const seeded = await db.prepare("SELECT 1 FROM _meta WHERE key='seeded'").first();
+    if (seeded) return; // 이미 준비됨 (빠른 경로)
+  } catch {
+    // _meta 테이블 없음 = 신규 DB → 아래에서 생성
+  }
+  await db.batch(SCHEMA.map((s) => db.prepare(s)));
+  await seedOnce(db);
 }
 
 /**

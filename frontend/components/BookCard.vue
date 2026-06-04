@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Quote as QuoteIcon } from "lucide-vue-next";
+import { Quote as QuoteIcon, ChevronRight } from "lucide-vue-next";
 import type { Book } from "~/types";
 
 defineProps<{ book: Book }>();
@@ -8,52 +8,45 @@ defineProps<{ book: Book }>();
 <template>
   <NuxtLink
     :to="`/books/${book.id}`"
-    class="group flex flex-col rounded-2xl border border-border/70 bg-card p-3 transition-all hover:border-border hover:shadow-sm"
+    class="group flex items-center gap-4 rounded-2xl border border-border/70 bg-card p-3 transition-all hover:border-border hover:shadow-sm lg:p-4"
   >
-    <div class="relative">
-      <BookCover :book="book" class="w-full shadow-sm" />
-      <div class="absolute left-2 top-2">
-        <UiStatusBadge :status="book.status" small />
-      </div>
-    </div>
+    <BookCover :book="book" class="w-14 shrink-0 shadow-sm lg:w-16" />
 
-    <div class="mt-3 flex flex-1 flex-col px-0.5">
-      <h3 class="line-clamp-2 text-[14px] font-bold leading-snug tracking-tight">
+    <div class="min-w-0 flex-1">
+      <div class="mb-1 flex items-center gap-2">
+        <UiStatusBadge :status="book.status" small />
+        <UiRating v-if="book.rating > 0" :model-value="book.rating" readonly :size="13" />
+      </div>
+      <h3 class="truncate text-[15px] font-bold tracking-tight lg:text-base">
         {{ book.title }}
       </h3>
-      <p
-        v-if="book.author"
-        class="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground"
-      >
-        {{ book.author }}
+      <p class="truncate text-[13px] text-muted-foreground">
+        {{ book.author }}{{ book.publisher ? ` · ${book.publisher}` : "" }}
       </p>
 
-      <!-- 별점 -->
-      <div v-if="book.rating > 0" class="mt-2">
-        <UiRating :model-value="book.rating" readonly :size="13" />
-      </div>
-
       <!-- 읽는 중 진행률 -->
-      <div v-if="book.status === 'reading' && book.progress !== null" class="mt-2">
-        <div class="h-1.5 w-full overflow-hidden rounded-full bg-muted">
+      <div
+        v-if="book.status === 'reading' && book.progress !== null"
+        class="mt-2 flex items-center gap-2"
+      >
+        <div class="h-1.5 max-w-48 flex-1 overflow-hidden rounded-full bg-muted">
           <div
             class="h-full rounded-full bg-primary"
             :style="{ width: `${book.progress}%` }"
           />
         </div>
-        <span class="mt-1 block text-[11px] text-muted-foreground"
-          >{{ book.progress }}%</span
-        >
+        <span class="shrink-0 text-[11px] text-muted-foreground">{{ book.progress }}%</span>
       </div>
+    </div>
 
-      <!-- 문장 수 -->
-      <div
+    <div class="flex shrink-0 items-center gap-2 text-muted-foreground">
+      <span
         v-if="book.quote_count > 0"
-        class="mt-auto flex items-center gap-1 pt-2 text-[12px] text-muted-foreground"
+        class="hidden items-center gap-1 text-[12px] sm:flex"
       >
-        <QuoteIcon class="size-3" />
-        문장 {{ book.quote_count }}
-      </div>
+        <QuoteIcon class="size-3.5" />{{ book.quote_count }}
+      </span>
+      <ChevronRight class="size-5 transition-transform group-hover:translate-x-0.5" />
     </div>
   </NuxtLink>
 </template>

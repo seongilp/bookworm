@@ -69,8 +69,8 @@ function onSaved() {
       </button>
     </div>
 
-    <div v-if="pending" class="grid grid-cols-2 gap-3 sm:grid-cols-3">
-      <div v-for="i in 6" :key="i" class="h-64 animate-pulse rounded-2xl bg-muted" />
+    <div v-if="pending" class="space-y-3">
+      <div v-for="i in 6" :key="i" class="h-24 animate-pulse rounded-2xl bg-muted" />
     </div>
 
     <EmptyState
@@ -90,10 +90,7 @@ function onSaved() {
       <template #icon>📚</template>
     </EmptyState>
 
-    <div
-      v-else
-      class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 lg:gap-5 xl:grid-cols-5"
-    >
+    <div v-else class="space-y-3">
       <BookCard v-for="book in filtered" :key="book.id" :book="book" />
     </div>
 
