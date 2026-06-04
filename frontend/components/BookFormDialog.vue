@@ -96,15 +96,22 @@ async function refreshInfo() {
 
 function focusFirstField() {
   if (!import.meta.client) return;
-  // 트랜지션으로 마운트된 뒤 포커스
-  setTimeout(() => {
-    const dlg = document.querySelector('[role="dialog"]');
-    if (!dlg) return;
-    const sel = isEdit.value
-      ? 'input[placeholder="책 제목"]'
-      : 'input[placeholder^="책 제목 검색"]';
-    (dlg.querySelector(sel) as HTMLInputElement | null)?.focus();
-  }, 120);
+  const sel = isEdit.value
+    ? 'input[placeholder="책 제목"]'
+    : 'input[placeholder^="책 제목 검색"]';
+  // 트랜지션 마운트를 기다리며 입력칸이 나타나면 포커스 (최대 ~0.6s 폴링)
+  let tries = 0;
+  const tick = () => {
+    const el = document
+      .querySelector('[role="dialog"]')
+      ?.querySelector(sel) as HTMLInputElement | null;
+    if (el) {
+      el.focus();
+      if (document.activeElement === el) return; // 성공
+    }
+    if (tries++ < 12) setTimeout(tick, 50);
+  };
+  setTimeout(tick, 60);
 }
 
 watch(open, (v) => {
