@@ -42,33 +42,35 @@
 }
 
 .dark {
-  --background: oklch(0.16 0.005 264);
-  --foreground: oklch(0.97 0.002 264);
+  /* 토스풍 다크: 딥 네이비-블루 틴트 + 또렷한 레이어 대비로 산뜻하게 */
+  --background: oklch(0.18 0.024 262);
+  --foreground: oklch(0.97 0.008 250);
 
-  --card: oklch(0.2 0.005 264);
-  --card-foreground: oklch(0.97 0.002 264);
+  --card: oklch(0.225 0.028 261);
+  --card-foreground: oklch(0.97 0.008 250);
 
-  --popover: oklch(0.2 0.005 264);
-  --popover-foreground: oklch(0.97 0.002 264);
+  --popover: oklch(0.225 0.028 261);
+  --popover-foreground: oklch(0.97 0.008 250);
 
-  --primary: oklch(0.65 0.18 256);
-  --primary-foreground: oklch(0.16 0.005 264);
+  /* 또렷한 토스 블루 */
+  --primary: oklch(0.7 0.165 256);
+  --primary-foreground: oklch(0.99 0 0);
 
-  --secondary: oklch(0.27 0.005 264);
-  --secondary-foreground: oklch(0.97 0.002 264);
+  --secondary: oklch(0.28 0.03 261);
+  --secondary-foreground: oklch(0.96 0.008 250);
 
-  --muted: oklch(0.27 0.005 264);
-  --muted-foreground: oklch(0.68 0.006 264);
+  --muted: oklch(0.27 0.028 261);
+  --muted-foreground: oklch(0.74 0.026 256);
 
-  --accent: oklch(0.27 0.005 264);
-  --accent-foreground: oklch(0.97 0.002 264);
+  --accent: oklch(0.31 0.038 261);
+  --accent-foreground: oklch(0.97 0.008 250);
 
-  --destructive: oklch(0.62 0.21 27);
+  --destructive: oklch(0.64 0.2 25);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.3 0.005 264);
-  --input: oklch(0.3 0.005 264);
-  --ring: oklch(0.65 0.18 256);
+  --border: oklch(0.32 0.034 261);
+  --input: oklch(0.32 0.034 261);
+  --ring: oklch(0.7 0.165 256);
 }
 
 @theme inline {
