@@ -94,9 +94,23 @@ async function refreshInfo() {
   }
 }
 
+function focusFirstField() {
+  if (!import.meta.client) return;
+  // 트랜지션으로 마운트된 뒤 포커스
+  setTimeout(() => {
+    const dlg = document.querySelector('[role="dialog"]');
+    if (!dlg) return;
+    const sel = isEdit.value
+      ? 'input[placeholder="책 제목"]'
+      : 'input[placeholder^="책 제목 검색"]';
+    (dlg.querySelector(sel) as HTMLInputElement | null)?.focus();
+  }, 120);
+}
+
 watch(open, (v) => {
   if (!v) return;
   reset();
+  focusFirstField();
   // 수정 모드에서 페이지수가 비어 있고 ISBN이 있으면 자동 조회
   if (isEdit.value && !totalPages.value && props.book?.isbn) {
     fillPagesByIsbn(props.book.isbn);
