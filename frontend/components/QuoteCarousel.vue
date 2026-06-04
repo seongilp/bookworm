@@ -4,11 +4,11 @@ import type { Quote } from "~/types";
 
 defineProps<{ quotes: Quote[]; title?: string }>();
 
-// 카드마다 은은한 블루 그라데이션을 번갈아 적용 (라이트/다크 자동 대응)
+// 카드마다 또렷한 블루 그라데이션을 번갈아 적용 (라이트/다크 자동 대응)
 const gradients = [
-  "from-primary/15 via-card to-card",
-  "from-card via-card to-primary/12",
-  "from-primary/10 via-primary/[0.04] to-card",
+  "from-primary/45 via-primary/20 to-primary/5",
+  "from-primary/10 via-primary/30 to-primary/50",
+  "from-primary/40 via-primary/15 to-primary/30",
 ];
 </script>
 
