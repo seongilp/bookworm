@@ -59,11 +59,6 @@ async function remove(q: Quote) {
   }
 }
 
-// 캐러셀: 즐겨찾기 우선, 없으면 최근 문장 (최대 8개)
-const featured = computed(() => {
-  const favs = quotes.value.filter((q) => q.is_favorite);
-  return (favs.length ? favs : quotes.value).slice(0, 8);
-});
 </script>
 
 <template>
@@ -78,13 +73,6 @@ const featured = computed(() => {
         지금까지 {{ quotes.length }}개의 문장을 모았어요
       </p>
     </div>
-
-    <!-- 다시 보는 문장 (캐러셀) -->
-    <QuoteCarousel
-      v-if="!search && featured.length"
-      :quotes="featured"
-      class="mb-6 block"
-    />
 
     <!-- 검색 -->
     <div class="relative mb-5">
