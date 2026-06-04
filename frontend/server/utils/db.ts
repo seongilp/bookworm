@@ -98,6 +98,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
       total_pages: 240,
       current_page: 240,
       publisher: "민음사",
+      cover: "https://image.aladin.co.kr/product/26/0/cover200/s452139198_1.jpg",
       quotes: [
         {
           content:
@@ -125,6 +126,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
       total_pages: 719,
       current_page: 210,
       publisher: "사이언스북스",
+      cover: "https://image.aladin.co.kr/product/87/9/cover200/s412032094_1.jpg",
       quotes: [
         {
           content: "우리는 별의 먼지로 만들어졌다. 우리는 코스모스가 스스로를 알아가는 한 방법이다.",
@@ -144,6 +146,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
       total_pages: 136,
       current_page: 136,
       publisher: "열린책들",
+      cover: "https://image.aladin.co.kr/product/6853/49/cover200/8932917248_2.jpg",
       quotes: [
         {
           content: "가장 중요한 것은 눈에 보이지 않아. 마음으로 보아야 잘 보이는 거야.",
@@ -170,6 +173,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
       total_pages: null,
       current_page: null,
       publisher: "민음사",
+      cover: "https://image.aladin.co.kr/product/39409/82/cover200/k782139090_1.jpg",
       quotes: [],
     },
   ];
@@ -178,7 +182,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
     const res = await db
       .prepare(
         `INSERT INTO book (title, author, status, rating, note, total_pages, current_page, cover_url, isbn, publisher, created_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, '', '', ?, ?)`,
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, '', ?, ?)`,
       )
       .bind(
         b.title,
@@ -188,6 +192,7 @@ export async function seedOnce(db: D1Database): Promise<boolean> {
         b.note,
         b.total_pages,
         b.current_page,
+        b.cover,
         b.publisher,
         now,
       )

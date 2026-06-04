@@ -32,11 +32,11 @@ CREATE INDEX idx_quote_book ON quote(book_id);
 CREATE INDEX idx_book_status ON book(status);
 CREATE TABLE _meta (key TEXT PRIMARY KEY, value TEXT);
 
-INSERT INTO book (id, title, author, status, rating, note, total_pages, current_page, publisher, created_at) VALUES
- (1, '데미안', '헤르만 헤세', 'done', 5, '나를 찾는 여정에 대한 책', 240, 240, '민음사', '2026-06-04T00:00:00.000Z'),
- (2, '코스모스', '칼 세이건', 'reading', 5, '', 719, 210, '사이언스북스', '2026-06-04T00:00:01.000Z'),
- (3, '어린 왕자', '생텍쥐페리', 'done', 4, '어른을 위한 동화', 136, 136, '열린책들', '2026-06-04T00:00:02.000Z'),
- (4, '1984', '조지 오웰', 'want', 0, '꼭 읽어볼 것', NULL, NULL, '민음사', '2026-06-04T00:00:03.000Z');
+INSERT INTO book (id, title, author, status, rating, note, total_pages, current_page, cover_url, publisher, created_at) VALUES
+ (1, '데미안', '헤르만 헤세', 'done', 5, '나를 찾는 여정에 대한 책', 240, 240, 'https://image.aladin.co.kr/product/26/0/cover200/s452139198_1.jpg', '민음사', '2026-06-04T00:00:00.000Z'),
+ (2, '코스모스', '칼 세이건', 'reading', 5, '', 719, 210, 'https://image.aladin.co.kr/product/87/9/cover200/s412032094_1.jpg', '사이언스북스', '2026-06-04T00:00:01.000Z'),
+ (3, '어린 왕자', '생텍쥐페리', 'done', 4, '어른을 위한 동화', 136, 136, 'https://image.aladin.co.kr/product/6853/49/cover200/8932917248_2.jpg', '열린책들', '2026-06-04T00:00:02.000Z'),
+ (4, '1984', '조지 오웰', 'want', 0, '꼭 읽어볼 것', NULL, NULL, 'https://image.aladin.co.kr/product/39409/82/cover200/k782139090_1.jpg', '민음사', '2026-06-04T00:00:03.000Z');
 
 INSERT INTO quote (book_id, content, page, memo, tags, is_favorite, created_at) VALUES
  (1, '새는 알에서 나오려고 투쟁한다. 알은 세계다. 태어나려는 자는 한 세계를 깨뜨려야 한다.', 123, '성장의 본질에 대하여', '성장,자아', 1, '2026-06-04T00:00:00.000Z'),
