@@ -191,10 +191,11 @@ async function save() {
 <template>
   <UiDialog
     v-model:open="open"
+    size="lg"
     :title="isEdit ? '책 정보 수정' : '책장에 추가'"
     :description="isEdit ? undefined : '제목으로 검색하거나 직접 입력하세요'"
   >
-    <div class="max-h-[70vh] space-y-4 overflow-y-auto pr-1">
+    <div class="max-h-[76vh] space-y-5 overflow-y-auto pr-1">
       <!-- 외부 검색 (추가 모드) -->
       <div v-if="!isEdit" class="space-y-2">
         <div class="relative">
@@ -204,7 +205,7 @@ async function save() {
           <UiInput
             v-model="searchQuery"
             placeholder="책 제목 검색 (예: 데미안)"
-            class="pl-11"
+            class="h-12 pl-11 text-[15px]"
           />
           <Loader2
             v-if="searching"
@@ -253,45 +254,49 @@ async function save() {
       </button>
 
       <!-- 선택/입력된 책 미리보기 + 폼 -->
-      <div class="flex gap-3">
-        <div class="w-20 shrink-0">
-          <BookCover :book="{ title, cover_url: coverUrl }" class="w-full" />
+      <div class="flex gap-4">
+        <div class="w-28 shrink-0">
+          <BookCover :book="{ title, cover_url: coverUrl }" class="w-full shadow-sm" />
           <button
             v-if="coverUrl"
             type="button"
-            class="mt-1 flex w-full items-center justify-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"
+            class="mt-1.5 flex w-full items-center justify-center gap-1 text-[12px] text-muted-foreground hover:text-foreground"
             @click="clearCover"
           >
-            <X class="size-3" /> 표지 제거
+            <X class="size-3.5" /> 표지 제거
           </button>
         </div>
-        <div class="flex-1 space-y-2">
-          <div class="space-y-1">
-            <label class="text-[12px] font-semibold text-foreground/80">제목</label>
-            <UiInput v-model="title" placeholder="책 제목" />
+        <div class="flex-1 space-y-3">
+          <div class="space-y-1.5">
+            <label class="text-[13px] font-semibold text-foreground/80">제목</label>
+            <UiInput v-model="title" placeholder="책 제목" class="h-12 text-[15px]" />
           </div>
-          <div class="space-y-1">
-            <label class="text-[12px] font-semibold text-foreground/80">저자</label>
-            <UiInput v-model="author" placeholder="저자" />
+          <div class="space-y-1.5">
+            <label class="text-[13px] font-semibold text-foreground/80">저자</label>
+            <UiInput v-model="author" placeholder="저자" class="h-12 text-[15px]" />
           </div>
-          <div class="space-y-1">
-            <label class="text-[12px] font-semibold text-foreground/80"
+          <div class="space-y-1.5">
+            <label class="text-[13px] font-semibold text-foreground/80"
               >출판사</label
             >
-            <UiInput v-model="publisher" placeholder="출판사 (선택)" />
+            <UiInput
+              v-model="publisher"
+              placeholder="출판사 (선택)"
+              class="h-12 text-[15px]"
+            />
           </div>
         </div>
       </div>
 
       <!-- 상태 -->
       <div class="space-y-1.5">
-        <label class="text-[12px] font-semibold text-foreground/80">상태</label>
+        <label class="text-[13px] font-semibold text-foreground/80">상태</label>
         <div class="grid grid-cols-3 gap-2">
           <button
             v-for="s in statuses"
             :key="s"
             type="button"
-            class="rounded-xl border py-2.5 text-[13px] font-semibold transition-colors"
+            class="rounded-xl border py-3.5 text-sm font-semibold transition-colors"
             :class="
               status === s
                 ? 'border-primary bg-primary/10 text-primary'
@@ -306,35 +311,39 @@ async function save() {
 
       <!-- 별점 -->
       <div class="space-y-1.5">
-        <label class="text-[12px] font-semibold text-foreground/80">별점</label>
-        <UiRating v-model="rating" :size="26" />
+        <label class="text-[13px] font-semibold text-foreground/80">별점</label>
+        <UiRating v-model="rating" :size="32" />
       </div>
 
       <!-- 페이지 -->
       <div class="grid grid-cols-2 gap-3">
         <div class="space-y-1">
-          <label class="text-[12px] font-semibold text-foreground/80"
+          <label class="text-[13px] font-semibold text-foreground/80"
             >현재 페이지</label
           >
-          <UiInput v-model="currentPage" type="number" placeholder="0" />
+          <UiInput v-model="currentPage" type="number" placeholder="0" class="h-12 text-[15px]" />
         </div>
         <div class="space-y-1">
-          <label class="flex items-center gap-1 text-[12px] font-semibold text-foreground/80">
+          <label class="flex items-center gap-1 text-[13px] font-semibold text-foreground/80">
             전체 페이지
             <span v-if="lookingUp" class="flex items-center gap-1 text-primary">
               <Loader2 class="size-3 animate-spin" /> 가져오는 중
             </span>
           </label>
-          <UiInput v-model="totalPages" type="number" placeholder="예: 320" />
+          <UiInput v-model="totalPages" type="number" placeholder="예: 320" class="h-12 text-[15px]" />
         </div>
       </div>
 
       <!-- 한줄평 -->
       <div class="space-y-1">
-        <label class="text-[12px] font-semibold text-foreground/80"
+        <label class="text-[13px] font-semibold text-foreground/80"
           >한줄평 (선택)</label
         >
-        <UiTextarea v-model="note" placeholder="이 책에 대한 생각" class="min-h-16" />
+        <UiTextarea
+          v-model="note"
+          placeholder="이 책에 대한 생각"
+          class="min-h-24 text-[15px]"
+        />
       </div>
 
       <UiButton

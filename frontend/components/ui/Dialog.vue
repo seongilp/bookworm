@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed, watch } from "vue";
 import { X } from "lucide-vue-next";
 
-defineProps<{ title?: string; description?: string }>();
+const props = withDefaults(
+  defineProps<{ title?: string; description?: string; size?: "md" | "lg" }>(),
+  { size: "md" },
+);
 const open = defineModel<boolean>("open", { default: false });
+
+const maxW = computed(() => (props.size === "lg" ? "max-w-2xl" : "max-w-lg"));
 
 // 모달이 열려 있는 동안 배경 스크롤 잠금
 watch(open, (v) => {
@@ -56,7 +61,10 @@ function onKey(e: KeyboardEvent) {
             v-if="open"
             role="dialog"
             aria-modal="true"
-            class="relative z-10 m-0 w-full max-w-lg rounded-t-3xl border border-border bg-card p-6 shadow-xl sm:m-4 sm:rounded-3xl"
+            :class="[
+              'relative z-10 m-0 w-full rounded-t-3xl border border-border bg-card p-6 shadow-xl sm:m-4 sm:rounded-3xl',
+              maxW,
+            ]"
           >
             <div class="mb-5 flex items-start justify-between gap-4">
               <div class="space-y-1">
