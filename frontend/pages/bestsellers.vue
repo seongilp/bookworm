@@ -36,13 +36,23 @@ async function add(item: BookSearchResult) {
   if (ownedKeys.value.has(k) || adding.value) return;
   adding.value = k;
   try {
+    // 베스트셀러 목록엔 페이지수가 없으니 ISBN으로 보강
+    let totalPages = item.total_pages ?? null;
+    if (!totalPages && item.isbn) {
+      try {
+        const detail = await api.lookupBook(item.isbn);
+        totalPages = detail?.total_pages ?? null;
+      } catch {
+        /* 무시 */
+      }
+    }
     await api.createBook({
       title: item.title,
       author: item.author,
       publisher: item.publisher,
       cover_url: item.cover_url,
       isbn: item.isbn,
-      total_pages: item.total_pages ?? null,
+      total_pages: totalPages,
       status: "want", // 담기 = 읽고 싶은
     });
     addedKeys.value = new Set([...addedKeys.value, k]);

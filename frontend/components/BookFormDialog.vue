@@ -25,6 +25,7 @@ const note = ref("");
 const coverUrl = ref("");
 const isbn = ref("");
 const saving = ref(false);
+const lookingUp = ref(false);
 
 // 외부 검색 상태
 const searchQuery = ref("");
@@ -53,8 +54,29 @@ function reset() {
   picked.value = isEdit.value;
 }
 
+async function fillPagesByIsbn(bookIsbn: string) {
+  if (!bookIsbn || totalPages.value) return;
+  lookingUp.value = true;
+  try {
+    const detail = await api.lookupBook(bookIsbn);
+    if (detail?.total_pages && !totalPages.value) {
+      totalPages.value = String(detail.total_pages);
+    }
+    if (detail?.cover_url && !coverUrl.value) coverUrl.value = detail.cover_url;
+  } catch {
+    /* 무시 */
+  } finally {
+    lookingUp.value = false;
+  }
+}
+
 watch(open, (v) => {
-  if (v) reset();
+  if (!v) return;
+  reset();
+  // 수정 모드에서 페이지수가 비어 있고 ISBN이 있으면 자동 조회
+  if (isEdit.value && !totalPages.value && props.book?.isbn) {
+    fillPagesByIsbn(props.book.isbn);
+  }
 });
 
 // 제목 검색 (디바운스)
@@ -80,8 +102,6 @@ watchDebounced(
   { debounce: 450 },
 );
 
-const lookingUp = ref(false);
-
 async function pick(r: BookSearchResult) {
   title.value = r.title;
   author.value = r.author;
@@ -95,20 +115,7 @@ async function pick(r: BookSearchResult) {
   searched.value = false;
 
   // 검색 결과에 페이지수가 없으면 ISBN으로 상세조회해 보강
-  if (!r.total_pages && r.isbn) {
-    lookingUp.value = true;
-    try {
-      const detail = await api.lookupBook(r.isbn);
-      if (detail?.total_pages && !totalPages.value) {
-        totalPages.value = String(detail.total_pages);
-      }
-      if (detail?.cover_url && !coverUrl.value) coverUrl.value = detail.cover_url;
-    } catch {
-      /* 페이지수 보강 실패는 무시 */
-    } finally {
-      lookingUp.value = false;
-    }
-  }
+  if (!r.total_pages && r.isbn) await fillPagesByIsbn(r.isbn);
 }
 
 function clearCover() {
