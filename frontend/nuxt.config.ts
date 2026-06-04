@@ -5,9 +5,11 @@ import blockStrayVue from "./vite-block-stray-vue";
 export default defineNuxtConfig({
   compatibilityDate: "2025-01-01",
   devtools: { enabled: false },
+  // GitHub Pages 빌드 시 NUXT_SSR=false 로 SPA 정적 산출 (API는 Cloudflare 호출)
+  ssr: process.env.NUXT_SSR !== "false",
   // Cloudflare Pages 풀스택: Nitro 서버 라우트가 Pages Functions로 배포된다.
   nitro: {
-    preset: "cloudflare-pages",
+    preset: process.env.NITRO_PRESET || "cloudflare-pages",
   },
   // 로컬 `nuxt dev`에서 wrangler.toml의 D1 바인딩(Miniflare)을 주입한다.
   modules: ["nitro-cloudflare-dev"],
