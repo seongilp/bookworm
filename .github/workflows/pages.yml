@@ -38,7 +38,7 @@ jobs:
           NITRO_PRESET: github_pages
           NUXT_APP_BASE_URL: /bookworm/
           NUXT_PUBLIC_API_BASE: https://bookworm-bdt.pages.dev
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: frontend/.output/public
 
