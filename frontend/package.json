@@ -2,7 +2,7 @@
   "name": "bookworm-frontend",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@11.28.13",
+  "packageManager": "pnpm@12.21.0",
   "scripts": {
     "dev": "nuxt dev",
     "build": "nuxt build",
